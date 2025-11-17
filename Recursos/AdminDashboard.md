@@ -1,5 +1,5 @@
 # Componente AdminDashboard
-```
+```js
 import { useState } from 'react';
 import { FUNCTIONS } from './functionsConfig'; // Tu archivo de configuración
 
@@ -170,3 +170,66 @@ function FunctionCard({ config, ClientCall, estado, objectId }) {
     );
 }
 ```
+En AdminDashboard se renderiza automáticamente un formulario por cada entrada en FUNCTIONS, creando una tarjeta (‘FunctionCard’) por función Move.
+
+```js
+{FUNCTIONS.map((config) => (
+   <FunctionCard config={config} … />
+))}
+```
+
+Lo permite agregar nuevas funciones Move simplemente editando el archivo functionsConfig.js, sin tocar React.
+
+## Subcomponente: FunctionCard
+
+Cada tarjeta representa una función Move configurable.
+Incluye:
+* título
+* descripción
+* inputs generados dinámicamente
+* botón para ejecutar la función
+
+El subcomponente recibe la configuración y genera los campos automáticamente:
+```js
+{config.inputs.map((input) => (
+  <input type={input.type.includes('u') ? "number" : "text"} />
+))}
+```
+
+🔄 Flujo de ejecución de una función
+
+Cuando el usuario presiona el botón Ejecutar, ocurre el siguiente proceso:
+
+1️⃣ El formulario recolecta los valores ingresados
+
+Se almacenan en un estado local (valores).
+
+2️⃣ Se prepara el arreglo de argumentos en orden
+
+El primer argumento siempre es el ObjectID de la empresa.
+El resto de los argumentos vienen de la configuración.
+
+```
+const argsOrdenados = [
+  objectId,
+  ...config.inputs.map(input => convertirTipo(input, valores[input.name]))
+];
+```
+
+3️⃣ Se detectan tipos numéricos y se convierten a objetos tipados
+
+Esto se hace para que ClientCall pueda serializarlos correctamente en BCS dentro de la transacción.
+
+4️⃣ Se llama a ClientCall()
+
+El componente no maneja lógica blockchain directamente; delega todo a ClientCall.
+```
+ClientCall({
+  funcion: config.nombreFuncion,
+  args: argsOrdenados,
+  soloLectura: config.soloLectura
+});
+```
+5️⃣ La UI muestra estado y resultados
+
+Si la transacción es de solo lectura (soloLectura = 1), se usa devInspect. Si es mutación, se firma, se ejecuta y se espera confirmación.
