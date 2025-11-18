@@ -110,7 +110,102 @@ Lo que dará como resultado mucha informacion relacionada con la transaccion. Si
 
 Donde al final se muestra el PackageID, o ID del paquete (nuestro código). Es importante guardar este ID, ya que mediante su uso es como haremos interaccion con nuestro paquete.
 
-## 
+# Integración del Frontend
+Una vez que cuentes tu proyecto desplegado en testnet y guardado el ID del paquete desplegado lo siguiente es abrir una nueva terminal, lo que puedes hacer pulsando el siguiente boton:
+
+![alt text](imagenes/boton.png)
+
+Esto para reiniciar la terminal y que se carguen las configuraciones del npm (gestor de modulos y paquetes de node).
+
+## Creación del proyecto con Vite
+Introducimos el siguiente comando en la terminal:
+
+```bash
+npm create vite@latest
+```
+
+Como respuesta obtendremos el siguiente mensaje en consola:
+
+```bash
+Need to install the following packages:
+create-vite@8.1.0
+Ok to proceed? (y) 
+```
+
+Donde escribiremos `y` y daremos `enter` para continuar, lo que nos mostrara lo siguiente:
+
+```bash
+> npx
+> create-vite
+
+│
+◆  Project name:
+│  vite-project
+```
+
+Ahora, escribiremos el nombre de nuestro proyecto, el nombre puede ser cualquiera, en este caso lo asignaremos como `frontend`, una vez escrito, pulsaremos nuevamente `enter`.
+
+Ahora nos pedira elegir un framework para comenzar a trabajar, en este caso elegiremos `React`:
+
+```
+◆  Select a framework:
+│  ○ Vanilla
+│  ○ Vue
+│  ○ React
+│  ○ Preact
+│  ○ Lit
+│  ○ Svelte
+│  ○ Solid
+│  ○ Qwik
+│  ○ Angular
+│  ○ Marko
+│  ● Others
+```
+
+Posteriormente, en las opciones de lenguaje seleccionamos `JavaScript`:
+
+```
+◆  Select a variant:
+│  ○ TypeScript
+│  ○ TypeScript + React Compiler
+│  ○ TypeScript + SWC
+│  ○ JavaScript
+│  ○ JavaScript + React Compiler
+│  ○ JavaScript + SWC
+│  ○ React Router v7 ↗
+│  ○ TanStack Router ↗
+│  ○ RedwoodSDK ↗
+│  ● RSC ↗ 
+```
+
+En la siguiente opcion seleccionamos `no`:
+
+```
+◆  Use rolldown-vite (Experimental)?:
+│  ○ Yes
+│  ● No
+└
+```
+
+Y por ultimo, seleccionamos la `yes`:
+
+```
+◆  Install with npm and start now?
+│  ● Yes / ○ No
+└
+```
+
+Ya creado el proyecto de frontend es necesario moverse al directorio creado mediante el siguiente comando:
+
+```
+cd <NOMBRE DE TU PROYECTO>
+```
+e instalar las siguientes dependencias:
+```
+npm install @mysten/sui.js @mysten/wallet-kit @mysten/dapp-kit 
+```
+
 
 
 > Este repositorio fue creado con base al sui-starter-kit de ZinHunter: https://github.com/WayLearnLatam/sui-starter-kit
+> Documentacion oficial de Sui de interaccion desde el frontend: https://github.com/MystenLabs/sui-stack-hello-world/tree/main
