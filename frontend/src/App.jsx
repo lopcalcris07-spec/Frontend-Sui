@@ -3,9 +3,12 @@ import { Transaction } from "@mysten/sui/transactions";
 import { isValidSuiObjectId } from "@mysten/sui/utils";
 import { useNetworkVariable } from "./networkConfig";
 import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
-import { useState } from 'react'
+import { useState } from 'react';
+import video from './video.mp4'
 
 import './App.css'
+import FormInicial from "./formInicial";
+import { AdminDashboard } from "./AdminDashboard";
 
 function App() {
   const suiClient = useSuiClient()
@@ -107,7 +110,11 @@ function App() {
         console.log("devInspect result:", result);
 
         const decoded = decodeReturnValues(result);
-        cambiarRespuesta(decoded);
+        // cambiarRespuesta(decoded);
+        if (params.funcion === "retornar_todo"){
+          cambiarRespuesta(`El usuario: ${decoded[4]}, que tiene un año de registro del: ${decoded[0]}, tiene un porcentaje de descuento del: ${decoded[3]['raw'][1]}, y una direccion de facturacion: ${decoded[1]}`)
+        }
+        
 
         return decoded;
       }
@@ -297,27 +304,57 @@ function App() {
     // ===========================
     //
     function decodeNivel(bytes) {
-      const arr = Uint8Array.from(bytes);
+      // const arr = Uint8Array.from(bytes);
 
-      if (arr.length < 2) {
-        return { tipo: "desconocido", descuento: null };
-      }
+      // if (arr.length < 2) {
+      //   return { tipo: "desconocido", descuento: null };
+      // }
 
-      const variant = arr[0];
-      const descuento = arr[1]; // u8 directo
+      // const variant = arr[0];
+      // const descuento = arr[1]; // u8 directo
 
-      const variants = ["cobre", "plata", "oro", "diamante"];
+      // const variants = ["cobre", "plata", "oro", "diamante"];
 
-      return {
-        tipo: variants[variant] ?? "desconocido",
-        descuento
-      };
+      // return {
+      //   tipo: variants[variant] ?? "desconocido",
+      //   descuento
+      // };
+      return { raw: bytes };
   }
   
   return (
 
     <div>
-      <h1>Hola Mundo</h1>
+      <video autoPlay loop playsInline muted className="back-video" >
+        <source src={video} type="video.mp4"/>
+      </video>
+      <div className="app-header">
+        <a>
+          <img className="logo" src="WayLearn_logo-horizontal_texto-blanco.png" onClick={() => setNuevaEmpresa(false)}/>
+        </a>
+        <ConnectButton />
+      </div>
+        {!nuevaEmpresa && <h1 style={{marginTop:"200px", fontSize:"80px"}}> Crea tu Empresa con WayLearn </h1>}
+        {!cuenta ?  
+        <h3 style={{marginTop:"50px", fontSize:"20px"}}> Antes de continuar conecta tu wallet </h3> : ( nuevaEmpresa ?
+        <AdminDashboard 
+          ClientCall={ClientCall}
+          estado={estado}
+          objectId={objectId}
+          setObjectId={setObjectId}
+          respuesta={respuesta}
+          /> :
+        <FormInicial 
+          ClientCall={ClientCall}
+          estado={estado}
+          setNuevaEmpresa={setNuevaEmpresa}
+        />
+      
+        )}
+        
+      <div>
+
+      </div>
     </div>
   )
 }
